@@ -1,0 +1,19 @@
+
+.offset {
+    display: block;
+    height: 100px;
+}
+.Nav {
+    background: red;
+    height: 100px;
+    width: 100%;
+    position: fixed;
+    top:0;
+    left:0;
+    line-height: 100px;
+
+    .link {
+        display: inline;
+        padding: 50px;
+    }
+}
