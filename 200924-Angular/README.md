@@ -1,27 +1,108 @@
-# TodoList
+# Angular!
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 10.1.3.
+Every element is split into 3 parts, to follow the MVC pattern, although it seems like the model and the controller are mixed together..
 
-## Development server
+The view is definitely separated though, splitted between the `css` and `html` files
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
 
-## Code scaffolding
+## NG Cli
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+Angular has a pretty complete CLI that alllows you to create stuff.
 
-## Build
+Create new service
+```bash
+# g s for generate service
+ng g s services/my-service
+```
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `--prod` flag for a production build.
+## HTML
 
-## Running unit tests
+The `HTML` gets parsed, which allows us to use a special syntax within it. We also have access to all class methods and parameters declared in the corresponding `ts` file
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+```html
+<div [ngClass]="setClasses()">
+    <input (change)="onToggle(todo)" type="checkbox" [checked]="todo.completed"/>
+    {{ todo.title }}
+    <button (click)="onDelete(todo)" type="del">x</button>
+</div>
+```
 
-## Running end-to-end tests
+- `[ ... ]` is a directive that allows you to dynamically define element attributes. In this case the classes. It can also be used for custom elements. See the Typescript section bellow
+- `( ... )` is an event. In this case, when the checkbox change, the function `onToggle` will get called.
+- `{{ ... }}` is interpollation, you can put any javascript in there
 
-Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protractortest.org/).
 
-## Further help
+## TypeScript
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
+This looks like basic Typescript, but has some Angular specific vocabulary:
+
+### Services
+
+The services are the model part of the MVC, they provide the Data.
+
+```typescript
+@Injectable({ providedIn: 'root' })
+```
+The `@Injectable` decorator is usally applied to services, it means that this class can be used as a dependency
+
+To use a service in a component:
+```typescript
+import MySerice from "wherever";
+
+class MyComp {
+    data: number=0;
+
+    constructor(private myService: MySerice) {}
+
+    ngOnInit() {
+        this.data = this.myService.getNumber();
+    }
+}
+```
+
+
+### Components
+
+The components are the controller part.
+
+```typescript
+@Component({
+  selector: 'app-root',
+  templateUrl: './app.component.html',
+  styleUrls: ['./app.component.css']
+})
+```
+The `@Component` decorator is used for all components. it defines an Angular component
+
+
+```typescript
+In the HTML calling the component:
+    <comp [param]="5" />
+
+In the ts of the component:
+class Comp {
+    @Input() param: int;
+}
+```
+`@Input` allows you to receive elements from the parent element. Like the `this.props` in React.
+
+### Lifecycle
+
+```typescript
+class MyComp {
+  ngOnInit(): void { }
+  ngAfterContentInit(): void { }
+  ngAfterViewInit(): void { }
+  ngOnChanges(): void { }
+  ngOnDestroy(): void { }
+}
+```
+
+### Imports
+
+Each time something new is added to angular, new imports have to be made in the main files. The "main files" are:
+- /src/app/app.module  
+    For everything related with external modules, e.g. `http`
+
+- /src/app/app.component  
+    For everything new internal component. This is automatically done when using the CLI
