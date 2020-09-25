@@ -15,6 +15,12 @@ Create new service
 ng g s services/my-service
 ```
 
+Create new component
+```bash
+# g c for generate component
+ng g c components/my-comp
+```
+
 ## HTML
 
 The `HTML` gets parsed, which allows us to use a special syntax within it. We also have access to all class methods and parameters declared in the corresponding `ts` file
@@ -75,16 +81,35 @@ The components are the controller part.
 The `@Component` decorator is used for all components. it defines an Angular component
 
 
+To comunicate values from parent to child:
 ```typescript
-In the HTML calling the component:
+In parent HTML:
     <comp [param]="5" />
 
-In the ts of the component:
+In the ts of the child component:
+import { Input } from '@angular/core';
 class Comp {
     @Input() param: int;
 }
 ```
 `@Input` allows you to receive elements from the parent element. Like the `this.props` in React.
+
+
+To comunicate values from child to parent:
+```typescript
+In the HTML calling the component:
+    <comp [param]="5" />
+
+In the ts of the child component:
+import { EventEmitter, Output } from '@angular/core';
+class Comp {
+    @Output() doStuff: EventEmitter<number>;
+
+    someFunc() {
+        this.doStuff.emit(435);
+    }
+}
+```
 
 ### Lifecycle
 
